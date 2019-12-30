@@ -19,7 +19,7 @@ object PascalsTriangle extends App {
   def triangle(n: Int): Unit = {
     for (i <- 0 to n) {
       for (j <- 0 to i) {
-        print(pascal(j, i) + " ")
+        print(s"${pascal(j, i)} ")
       }
       println
     }
