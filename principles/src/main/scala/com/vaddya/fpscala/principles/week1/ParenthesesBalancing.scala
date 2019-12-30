@@ -9,19 +9,19 @@ import scala.annotation.tailrec
 object ParenthesesBalancing extends App {
   def balance(chars: List[Char]): Boolean = {
     @tailrec
-    def recBalance(chars: List[Char], stack: List[Char]): Boolean = {
+    def iter(chars: List[Char], stack: List[Char]): Boolean = {
       chars match {
         case Nil => true
-        case '(' :: ctail => recBalance(ctail, '(' :: stack)
+        case '(' :: ctail => iter(ctail, '(' :: stack)
         case ')' :: ctail => stack match {
-          case '(' :: stail => recBalance(ctail, stail)
+          case '(' :: stail => iter(ctail, stail)
           case _ => false
         }
-        case _ => recBalance(chars.tail, stack)
+        case _ => iter(chars.tail, stack)
       }
     }
 
-    recBalance(chars, Nil)
+    iter(chars, Nil)
   }
 
   assert(balance("(if (zero? x) max (/ 1 x))".toList))
