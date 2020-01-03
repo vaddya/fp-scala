@@ -46,5 +46,5 @@ class QuickCheckSuite {
   @Test def `Bogus (5) binomial heap does not satisfy properties. (10pts)`: Unit =
     checkBogus(new QuickCheckHeap with Bogus5BinomialHeap)
 
-//  @Rule def individualTestTimeout = new org.junit.rules.Timeout(10 * 1000)
+  @Rule def individualTestTimeout = new org.junit.rules.Timeout(10 * 1000)
 }

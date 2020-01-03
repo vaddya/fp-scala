@@ -12,8 +12,8 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
   lazy val genHeap: Gen[H] = oneOf(
     const(empty),
     for {
-      a: A <- arbitrary[A]
-      h: H <- frequency((1, empty), (1, genHeap))
+      a: A <- arbitrary[Int]
+      h: H <- frequency((1, empty), (10, genHeap))
     } yield insert(a, h)
   )
   implicit lazy val arbHeap: Arbitrary[H] = Arbitrary(genHeap)
@@ -30,24 +30,25 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
 
   property("after insertion and deletion from empty heap it should be empty") = forAll { h: H =>
     isEmpty(h) ==> {
-      isEmpty(deleteMin(insert(0, h)))
+      isEmpty(deleteMin(insert(10, h)))
     }
   }
 
   property("sequence of min should be sorted in ascending order") = forAll { h: H =>
     @tailrec
     def ascending(prev: A, heap: H): Boolean = {
-      if (isEmpty(h)) true
+      if (isEmpty(heap)) true
       else {
-        val m = findMin(h)
-        prev <= m && ascending(m, deleteMin(h))
+        val m = findMin(heap)
+        prev <= m && ascending(m, deleteMin(heap))
       }
     }
 
-    ascending(Int.MinValue, h)
+    if (isEmpty(h)) true
+    else ascending(findMin(h), h)
   }
 
-  property("min of two melded heaps should be min of their min") = forAll { (h1: H, h2: H) =>
+  property("min of melded two non-empty heaps should be min of their min") = forAll { (h1: H, h2: H) =>
     (nonEmpty(h1) && nonEmpty(h2)) ==> {
       val m = findMin(h1) min findMin(h2)
       findMin(meld(h1, h2)) == m
