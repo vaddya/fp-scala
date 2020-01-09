@@ -1,2 +1,5 @@
 # http://alaska.epfl.ch/~dockermoocs/bigdata/wikipedia.dat
 wikipedia/wikipedia.dat
+
+# http://alaska.epfl.ch/~dockermoocs/bigdata/stackoverflow.csv
+stackoverflow/stackoverflow.csv
