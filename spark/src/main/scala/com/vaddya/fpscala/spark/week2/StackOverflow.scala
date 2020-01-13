@@ -1,11 +1,9 @@
 package com.vaddya.fpscala.spark.week2
 
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.rdd.RDD
-import annotation.tailrec
-import scala.reflect.ClassTag
+
+import scala.annotation.tailrec
 
 /** A raw stackoverflow posting, either a question or an answer */
 case class Posting(postingType: Int,
@@ -288,7 +286,7 @@ class StackOverflow extends StackOverflowInterface with Serializable {
       val langPercent: Double = vs.count { case (index, _) => index == langIndex } * 100.0 / clusterSize
       val medianScore: Int = {
         val seq = vs.map { case (_, score) => score }.toSeq.sorted
-        
+
         if (seq.size % 2 == 1)
           seq(seq.size / 2)
         else {

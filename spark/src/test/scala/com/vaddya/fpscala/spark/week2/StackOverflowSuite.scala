@@ -1,12 +1,7 @@
 package com.vaddya.fpscala.spark.week2
 
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
-import org.apache.spark.rdd.RDD
+import org.apache.spark.{SparkConf, SparkContext}
 import org.junit._
-import org.junit.Assert.assertEquals
-import java.io.File
 
 object StackOverflowSuite {
   val conf: SparkConf = new SparkConf().setMaster("local").setAppName("StackOverflow")
@@ -14,7 +9,6 @@ object StackOverflowSuite {
 }
 
 class StackOverflowSuite {
-  import StackOverflowSuite._
 
   lazy val testObject = new StackOverflow {
     override val langs =
