@@ -24,7 +24,7 @@ object StackOverflow extends StackOverflow {
 
   /** Main function */
   def main(args: Array[String]): Unit = {
-
+    sc.setLogLevel("ERROR")
     val lines = sc.textFile("src/main/resources/stackoverflow/stackoverflow.csv")
     val raw = rawPostings(lines)
     val grouped = groupedPostings(raw)
@@ -129,7 +129,6 @@ class StackOverflow extends StackOverflowInterface with Serializable {
 
   /** Sample the vectors */
   def sampleVectors(vectors: RDD[(LangIndex, HighScore)]): Array[(Int, Int)] = {
-
     assert(kmeansKernels % langs.length == 0, "kmeansKernels should be a multiple of the number of languages studied.")
     val perLang = kmeansKernels / langs.length
 
@@ -179,8 +178,13 @@ class StackOverflow extends StackOverflowInterface with Serializable {
   /** Main kmeans computation */
   @tailrec final def kmeans(means: Array[(Int, Int)], vectors: RDD[(Int, Int)], iter: Int = 1, debug: Boolean = false): Array[(Int, Int)] = {
     val newMeans = means.clone() // you need to compute newMeans
+    vectors
+      .map(v => (findClosest(v, means), v))
+      .groupByKey()
+      .mapValues(averageVectors)
+      .collect()
+      .foreach { case (langIndex, coords) => newMeans(langIndex) = coords }
 
-    // TODO: Fill in the newMeans array
     val distance = euclideanDistance(means, newMeans)
 
     if (debug) {
@@ -214,9 +218,8 @@ class StackOverflow extends StackOverflowInterface with Serializable {
   //
 
   /** Decide whether the kmeans clustering converged */
-  def converged(distance: Double) =
+  def converged(distance: Double): Boolean =
     distance < kmeansEta
-
 
   /** Return the euclidean distance between two points */
   def euclideanDistance(v1: (Int, Int), v2: (Int, Int)): Double = {
@@ -298,7 +301,10 @@ class StackOverflow extends StackOverflowInterface with Serializable {
       (langLabel, langPercent, clusterSize, medianScore)
     }
 
-    median.collect().map(_._2).sortBy(_._4)
+    median
+      .collect()
+      .map { case (_, cluster) => cluster }
+      .sortBy { case (_, _, _, score) => -score }
   }
 
   def printResults(results: Array[(String, Double, Int, Int)]): Unit = {

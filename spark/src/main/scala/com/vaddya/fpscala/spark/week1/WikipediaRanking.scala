@@ -41,15 +41,17 @@ object WikipediaRanking extends WikipediaRankingInterface {
    *   several seconds.
    */
   def rankLangs(langs: List[String], rdd: RDD[WikipediaArticle]): List[(String, Int)] =
-    langs.map(lang => (lang, occurrencesOfLang(lang, wikiRdd)))
+    langs
+      .map(lang => (lang, occurrencesOfLang(lang, rdd)))
       .sortBy { case (_, occ) => occ }
 
   /* Compute an inverted index of the set of articles, mapping each language
    * to the Wikipedia pages in which it occurs.
    */
   def makeIndex(langs: List[String], rdd: RDD[WikipediaArticle]): RDD[(String, Iterable[WikipediaArticle])] =
-    rdd.flatMap(a => langs.filter(a.mentionsLanguage).map((_, a)))
-      .groupByKey()
+    rdd
+      .flatMap(a => langs.filter(a.mentionsLanguage).map((_, a)))
+      .groupByKey
 
   /* (2) Compute the language ranking again, but now using the inverted index. Can you notice
    *     a performance improvement?
@@ -58,8 +60,11 @@ object WikipediaRanking extends WikipediaRankingInterface {
    *   several seconds.
    */
   def rankLangsUsingIndex(index: RDD[(String, Iterable[WikipediaArticle])]): List[(String, Int)] =
-    index.map { case (lang, articles) => (lang, articles.size) }.collect
-      .sortBy { case (_, occ) => occ }(Ordering[Int].reverse).toList
+    index
+      .map { case (lang, articles) => (lang, articles.size) }
+      .collect
+      .sortBy { case (_, occ) => -occ }
+      .toList
 
   /* (3) Use `reduceByKey` so that the computation of the index and the ranking are combined.
    *     Can you notice an improvement in performance compared to measuring *both* the computation of the index
@@ -72,6 +77,7 @@ object WikipediaRanking extends WikipediaRankingInterface {
     rankLangsUsingIndex(makeIndex(langs, wikiRdd))
 
   def main(args: Array[String]): Unit = {
+    sc.setLogLevel("ERROR")
 
     /* Languages ranked according to (1) */
     val langsRanked: List[(String, Int)] = timed("Part 1: naive ranking", rankLangs(langs, wikiRdd))
@@ -84,6 +90,11 @@ object WikipediaRanking extends WikipediaRankingInterface {
 
     /* Languages ranked according to (3) */
     val langsRanked3: List[(String, Int)] = timed("Part 3: ranking using reduceByKey", rankLangsReduceByKey(langs, wikiRdd))
+
+    /* Output final result */
+    langsRanked3
+      .map { case (lang, occ) => s"$lang -> $occ" }
+      .foreach(println)
 
     /* Output the speed of each ranking */
     println(timing)

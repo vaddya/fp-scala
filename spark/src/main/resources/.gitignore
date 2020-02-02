@@ -1,8 +1,11 @@
 # http://alaska.epfl.ch/~dockermoocs/bigdata/wikipedia.dat
 wikipedia/wikipedia.dat
+!wikipedia/output.log
 
 # http://alaska.epfl.ch/~dockermoocs/bigdata/stackoverflow.csv
 stackoverflow/stackoverflow.csv
+!stackoverflow/output.log
 
 # http://alaska.epfl.ch/~dockermoocs/bigdata/atussum.csv
 timeusage/atussum.csv
+!timeusage/output.log
