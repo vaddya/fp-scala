@@ -3,3 +3,6 @@ wikipedia/wikipedia.dat
 
 # http://alaska.epfl.ch/~dockermoocs/bigdata/stackoverflow.csv
 stackoverflow/stackoverflow.csv
+
+# http://alaska.epfl.ch/~dockermoocs/bigdata/atussum.csv
+timeusage/atussum.csv
