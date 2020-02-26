@@ -50,7 +50,6 @@ object BinaryTreeSet {
 }
 
 class BinaryTreeSet extends Actor {
-
   import BinaryTreeSet._
   import BinaryTreeNode._
 
@@ -106,9 +105,8 @@ object BinaryTreeNode {
 }
 
 class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
-
-  import BinaryTreeSet._
   import BinaryTreeNode._
+  import BinaryTreeSet._
 
   var subtrees: Map[Position, ActorRef] = Map()
   var removed: Boolean = initiallyRemoved
