@@ -157,9 +157,11 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
 
     case ct@CopyTo(treeNode) =>
       if (removed && subtrees.isEmpty) context.parent ! CopyFinished
-      if (!removed) treeNode ! Insert(self, -1, elem)
-      subtrees foreach { case (_, node) => node ! ct }
-      context become copying(subtrees.values.toSet, insertConfirmed = removed)
+      else {
+        if (!removed) treeNode ! Insert(self, -1, elem)
+        subtrees foreach { case (_, node) => node ! ct }
+        context become copying(subtrees.values.toSet, insertConfirmed = removed)
+      }
   }
 
   /** `expected` is the set of ActorRefs whose replies we are waiting for,
