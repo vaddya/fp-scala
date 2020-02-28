@@ -58,7 +58,7 @@ class BinaryTreeSet extends Actor {
   /** Used to stash incoming operations during garbage collection) */
   var pendingQueue: Seq[Operation] = Queue.empty[Operation]
 
-  def createRoot: ActorRef = context.actorOf(BinaryTreeNode(0, initiallyRemoved = true))
+  def createRoot: ActorRef = context.actorOf(BinaryTreeNode.props(0, initiallyRemoved = true))
 
   def receive: Receive = normal
 
@@ -101,7 +101,7 @@ object BinaryTreeNode {
     */
   case object CopyFinished
 
-  def apply(elem: Int, initiallyRemoved: Boolean): Props = Props(new BinaryTreeNode(elem, initiallyRemoved))
+  def props(elem: Int, initiallyRemoved: Boolean): Props = Props(new BinaryTreeNode(elem, initiallyRemoved))
 }
 
 class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
@@ -116,10 +116,11 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
   /** Handles `Operation` messages and `CopyTo` requests. */
   def normal: Receive = {
     case op@Insert(req, id, e) =>
-      def insert(position: Position): Unit = subtrees get position match {
+      def insert(pos: Position): Unit = subtrees get pos match {
         case Some(node) => node ! op
         case None =>
-          subtrees = subtrees.updated(position, context.actorOf(BinaryTreeNode(e, initiallyRemoved = false)))
+          val node = context.actorOf(BinaryTreeNode.props(e, initiallyRemoved = false))
+          subtrees = subtrees.updated(pos, node)
           req ! OperationFinished(id)
       }
 
@@ -157,7 +158,7 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
       if (removed && subtrees.isEmpty) context.parent ! CopyFinished
       else {
         if (!removed) treeNode ! Insert(self, -1, elem)
-        subtrees foreach { case (_, node) => node ! ct }
+        subtrees.values foreach (_ ! ct)
         context become copying(subtrees.values.toSet, insertConfirmed = removed)
       }
   }
