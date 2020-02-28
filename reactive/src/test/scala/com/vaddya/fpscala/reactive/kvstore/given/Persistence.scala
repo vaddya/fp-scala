@@ -1,7 +1,7 @@
 /**
   * Copyright (C) 2013-2015 Typesafe Inc. <http://www.typesafe.com>
   */
-package com.vaddya.fpscala.kvstore.given
+package com.vaddya.fpscala.reactive.kvstore.`given`
 
 import akka.actor.{Actor, Props}
 
@@ -12,7 +12,7 @@ object Persistence {
 }
 
 class Persistence(flaky: Boolean) extends Actor {
-  import com.vaddya.fpscala.kvstore.Persistence._
+  import com.vaddya.fpscala.reactive.kvstore.Persistence._
 
   private def newFailCount: Int = if (flaky) Random.nextInt(4) else 0
   var failSteps: Int = newFailCount

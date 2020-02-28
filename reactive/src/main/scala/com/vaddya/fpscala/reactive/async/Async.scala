@@ -1,4 +1,4 @@
-package com.vaddya.fpscala.async
+package com.vaddya.fpscala.reactive.async
 
 import scala.concurrent.{Future, Promise}
 import scala.concurrent.ExecutionContext.Implicits.global

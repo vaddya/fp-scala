@@ -1,7 +1,7 @@
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{ OneForOneStrategy, PoisonPill, Props, SupervisorStrategy, Terminated, ActorRef, Actor }
-import com.vaddya.fpscala.kvstore.Arbiter._
+import Arbiter._
 import akka.pattern.{ ask, pipe }
 import scala.concurrent.duration._
 import akka.util.Timeout

@@ -1,14 +1,14 @@
 /**
   * Copyright (C) 2015 Typesafe Inc. <http://www.typesafe.com>
   */
-package com.vaddya.fpscala.kvstore.given
+package com.vaddya.fpscala.reactive.kvstore.`given`
 
 import akka.actor.{Actor, ActorRef, Props}
 
 import scala.util.Random
 
 class Arbiter(lossy: Boolean, audit: ActorRef) extends Actor {
-  import com.vaddya.fpscala.kvstore.Arbiter._
+  import com.vaddya.fpscala.reactive.kvstore.Arbiter._
 
   var leader: Option[ActorRef] = None
   var replicas = Set.empty[ActorRef]

@@ -1,9 +1,12 @@
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.testkit.TestProbe
 import com.vaddya.fpscala.kvstore.Arbiter._
 import com.vaddya.fpscala.kvstore.Persistence._
 import com.vaddya.fpscala.kvstore.Replicator._
+import com.vaddya.fpscala.reactive.kvstore.Arbiter.{Join, JoinedPrimary}
+import com.vaddya.fpscala.reactive.kvstore.Persistence.Persist
+import com.vaddya.fpscala.reactive.kvstore.Replicator.Snapshot
 import org.junit.Test
 
 import scala.concurrent.duration._

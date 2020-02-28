@@ -1,4 +1,4 @@
-package com.vaddya.fpscala.async
+package com.vaddya.fpscala.reactive.async
 
 import org.junit.Assert._
 import org.junit.Test

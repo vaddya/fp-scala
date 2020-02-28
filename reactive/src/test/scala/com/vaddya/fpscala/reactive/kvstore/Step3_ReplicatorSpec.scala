@@ -1,7 +1,7 @@
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.testkit.TestProbe
-import com.vaddya.fpscala.kvstore.Replicator.{Replicate, Snapshot, SnapshotAck}
+import Replicator.{Replicate, Snapshot, SnapshotAck}
 import org.junit.Test
 
 import scala.concurrent.duration._

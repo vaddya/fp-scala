@@ -1,7 +1,7 @@
 /**
   * Copyright (C) 2009-2013 Typesafe Inc. <http://www.typesafe.com>
   */
-package com.vaddya.fpscala.actorbintree
+package com.vaddya.fpscala.reactive.actorbintree
 
 import akka.actor._
 

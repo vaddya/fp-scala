@@ -1,4 +1,4 @@
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.ActorSystem
 

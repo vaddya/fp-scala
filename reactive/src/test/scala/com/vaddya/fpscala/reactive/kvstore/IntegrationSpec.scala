@@ -1,7 +1,7 @@
 /**
   * Copyright (C) 2013-2015 Typesafe Inc. <http://www.typesafe.com>
   */
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.Props
 import akka.testkit.TestProbe

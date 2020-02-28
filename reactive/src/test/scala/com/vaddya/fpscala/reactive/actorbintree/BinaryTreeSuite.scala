@@ -1,11 +1,12 @@
 /**
   * Copyright (C) 2009-2015 Typesafe Inc. <http://www.typesafe.com>
   */
-package com.vaddya.fpscala.actorbintree
+package com.vaddya.fpscala.reactive.actorbintree
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import com.vaddya.fpscala.actorbintree.BinaryTreeSet._
+import com.vaddya.fpscala.reactive.actorbintree.BinaryTreeSet.{GC, Operation, OperationReply}
 import org.junit.Assert._
 import org.junit.Test
 

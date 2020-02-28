@@ -1,8 +1,8 @@
-package com.vaddya.fpscala.kvstore
+package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.testkit.TestProbe
-import com.vaddya.fpscala.kvstore.Replicator.{Snapshot, SnapshotAck}
+import Replicator.{Snapshot, SnapshotAck}
 
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
