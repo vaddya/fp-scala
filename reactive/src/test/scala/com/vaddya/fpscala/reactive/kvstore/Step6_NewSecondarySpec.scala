@@ -1,8 +1,8 @@
 package com.vaddya.fpscala.reactive.kvstore
 
 import akka.testkit.TestProbe
-import com.vaddya.fpscala.kvstore.Arbiter._
-import com.vaddya.fpscala.kvstore.Replicator._
+import com.vaddya.fpscala.reactive.kvstore.Arbiter._
+import com.vaddya.fpscala.reactive.kvstore.Replicator._
 import com.vaddya.fpscala.reactive.kvstore.Arbiter.{Join, JoinedPrimary}
 import org.junit.Test
 
