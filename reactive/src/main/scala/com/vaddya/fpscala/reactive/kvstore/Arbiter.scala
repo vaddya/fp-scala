@@ -8,9 +8,7 @@ object Arbiter {
   case object JoinedPrimary
   case object JoinedSecondary
 
-  /**
-    * This message contains all replicas currently known to the arbiter, including the primary.
-    */
+  /** This message contains all replicas currently known to the arbiter, including the primary. */
   case class Replicas(replicas: Set[ActorRef])
 }
 

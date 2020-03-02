@@ -1,8 +1,8 @@
 package com.vaddya.fpscala.reactive.kvstore
 
-import akka.actor.Props
-import akka.actor.Actor
-import akka.actor.ActorRef
+import akka.actor.{Actor, ActorRef, Props, ReceiveTimeout}
+import jdk.nashorn.internal.runtime.Undefined
+
 import scala.concurrent.duration._
 
 object Replicator {
@@ -11,6 +11,8 @@ object Replicator {
 
   case class Snapshot(key: String, valueOption: Option[String], seq: Long)
   case class SnapshotAck(key: String, seq: Long)
+  
+  case class Pending(id: Long, sender: ActorRef, snapshot: Snapshot)
 
   def props(replica: ActorRef): Props = Props(new Replicator(replica))
 }
@@ -19,24 +21,33 @@ class Replicator(val replica: ActorRef) extends Actor {
   import Replicator._
   import context.dispatcher
 
-  /*
-   * The contents of this actor is just a suggestion, you can implement it in any way you like.
-   */
-
   // map from sequence number to pair of sender and request
-  var acks = Map.empty[Long, (ActorRef, Replicate)]
-  // a sequence of not-yet-sent snapshots (you can disregard this if not implementing batching)
-  var pending = Vector.empty[Snapshot]
+  var acks = Map.empty[Long, (ActorRef, Long, Snapshot)]
+  // a sequence of not-yet-sent snapshots
+//  var pending = Vector.empty[Snapshot]
 
-  var _seqCounter = 0L
+  var seqCounter = 0L
   def nextSeq(): Long = {
-    val ret = _seqCounter
-    _seqCounter += 1
+    val ret = seqCounter
+    seqCounter += 1
     ret
   }
 
-  /* TODO Behavior for the Replicator. */
   def receive: Receive = {
-    case _ => ???
+    case Replicate(key, valueOption, id) =>
+      val seq = nextSeq()
+      val snapshot = Snapshot(key, valueOption, seq)
+      acks += seq -> (sender, id, snapshot)
+      context.setReceiveTimeout(100 millis)
+    case ReceiveTimeout =>
+      if (acks.isEmpty) context.setReceiveTimeout(Duration.Undefined)
+      else acks.values foreach { case (_, _, snapshot) => replica ! snapshot }
+    case SnapshotAck(key, seq) =>
+      acks get seq match {
+        case Some((actor, id, _)) => 
+          acks -= seq
+          actor ! Replicated(key, id)
+        case None =>
+      }
   }
 }
