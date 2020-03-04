@@ -21,6 +21,7 @@ class Replicator(val replica: ActorRef) extends Actor {
 
   /** Map from sequence number to request id, sender and snapshot */
   var pending = Map.empty[Long, Pending]
+  /** Sequence counter to sync with replica */
   var seqCounter = 0L
 
   def receive: Receive = {

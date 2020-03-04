@@ -32,7 +32,9 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
   import Replica._
   import Replicator._
 
+  /** In-memory key-value storage */
   var kv = Map.empty[String, String]
+  /** Persistent storage */
   var storage: ActorRef = createStorage()
   /** Map from secondary replicas to replicators */
   var secondaries = Map.empty[ActorRef, ActorRef]
@@ -40,6 +42,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
   var replicators = Set.empty[ActorRef]
   /** Map from operation id to operation handler */
   var handlers = Map.empty[Long, Handler]
+  /** Sequence counter to sync with replicator */
   var seqCounter = 0L
 
   override def preStart(): Unit = {
@@ -97,7 +100,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
 
   def withoutReplicators(replicators: Set[ActorRef])(id: Long, handler: Handler): Option[(Long, Handler)] = {
     val waiting = handler.replicators -- replicators
-    if (waiting.nonEmpty) Some(id -> handler.copy(replicators = waiting))
+    if (waiting.nonEmpty || !handler.persisted) Some(id -> handler.copy(replicators = waiting))
     else {
       handler.actor ! OperationAck(id)
       None
