@@ -1,7 +1,7 @@
 package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{Actor, ActorRef, Props, ReceiveTimeout}
-import com.vaddya.fpscala.reactive.kvstore.Replicator._
+import Replicator._
 
 import scala.concurrent.duration._
 

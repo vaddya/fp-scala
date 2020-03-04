@@ -1,10 +1,10 @@
 package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{Actor, ActorRef, PoisonPill, Props, ReceiveTimeout, Terminated}
-import com.vaddya.fpscala.reactive.kvstore.Arbiter._
-import com.vaddya.fpscala.reactive.kvstore.Persistence._
-import com.vaddya.fpscala.reactive.kvstore.Replica._
-import com.vaddya.fpscala.reactive.kvstore.Replicator._
+import Arbiter._
+import Persistence._
+import Replica._
+import Replicator._
 
 import scala.concurrent.duration._
 
