@@ -54,11 +54,11 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
     case Insert(key, value, id) =>
       kv += key -> value
       handlers += id -> createLeaderHandler(key, Some(value), id)
-      context.setReceiveTimeout(100 millis)
+      context.setReceiveTimeout(100.millis)
     case Remove(key, id) =>
       kv -= key
       handlers += id -> createLeaderHandler(key, None, id)
-      context.setReceiveTimeout(100 millis)
+      context.setReceiveTimeout(100.millis)
     case Replicated(_, id) =>
       handlers = handlers.updatedWith(id) {
         case Some(handler) => control(id, handler.copy(replicators = handler.replicators - sender))
@@ -140,7 +140,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
         }
         handlers += seq -> createReplicaHandler(key, valueOption, seq)
         seqCounter += 1
-        context.setReceiveTimeout(100 millis)
+        context.setReceiveTimeout(100.millis)
       }
     case Persisted(key, seq) =>
       handlers = handlers.updatedWith(seq) {

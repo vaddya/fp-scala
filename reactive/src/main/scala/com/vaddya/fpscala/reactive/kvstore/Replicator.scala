@@ -28,7 +28,7 @@ class Replicator(val replica: ActorRef) extends Actor {
       val snapshot = Snapshot(key, valueOption, seq)
       replica ! snapshot
       pending += seq -> Pending(id, sender, snapshot)
-      context.setReceiveTimeout(100 millis)
+      context.setReceiveTimeout(100.millis)
     case ReceiveTimeout =>
       if (pending.isEmpty) context.setReceiveTimeout(Duration.Undefined)
       else pending.values foreach (pending => replica ! pending.snapshot)
