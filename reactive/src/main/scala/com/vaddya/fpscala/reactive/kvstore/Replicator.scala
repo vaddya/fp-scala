@@ -1,7 +1,6 @@
 package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{Actor, ActorRef, Props, ReceiveTimeout}
-import Replicator._
 
 import scala.concurrent.duration._
 
@@ -18,6 +17,8 @@ object Replicator {
 }
 
 class Replicator(val replica: ActorRef) extends Actor {
+  import Replicator._
+
   /** Map from sequence number to request id, sender and snapshot */
   var pending = Map.empty[Long, Pending]
   var seqCounter = 0L

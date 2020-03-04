@@ -1,14 +1,12 @@
 package com.vaddya.fpscala.reactive.kvstore
 
 import akka.actor.{Actor, ActorRef, PoisonPill, Props, ReceiveTimeout, Terminated}
-import Arbiter._
-import Persistence._
-import Replica._
-import Replicator._
 
 import scala.concurrent.duration._
 
 object Replica {
+  import Persistence.Persist
+
   sealed trait Operation {
     def key: String
     def id: Long
@@ -29,6 +27,11 @@ object Replica {
 }
 
 class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
+  import Arbiter._
+  import Persistence._
+  import Replica._
+  import Replicator._
+
   var kv = Map.empty[String, String]
   var storage: ActorRef = createStorage()
   /** Map from secondary replicas to replicators */
