@@ -161,7 +161,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
     Handler(sender, persist)
   }
 
-  def persist(handlers: Iterable[Handler]): Unit = handlers filter (!_.persisted) foreach (storage ! _.persist)
+  def persist(handlers: Iterable[Handler]): Unit = handlers filterNot (_.persisted) foreach (storage ! _.persist)
 
   def createReplicators(replicas: Set[ActorRef]): Map[ActorRef, ActorRef] = {
     val replicators = replicas.map(replica => replica -> context.actorOf(Replicator.props(replica))).toMap
