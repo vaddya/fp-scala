@@ -33,12 +33,10 @@ class Replicator(val replica: ActorRef) extends Actor {
       context.setReceiveTimeout(100.millis)
     case ReceiveTimeout =>
       if (pending.isEmpty) context.setReceiveTimeout(Duration.Undefined)
-      else pending.values foreach (pending => replica ! pending.snapshot)
+      else pending.values foreach (replica ! _.snapshot)
     case SnapshotAck(key, seq) =>
       pending = pending.updatedWith(seq) {
-        case Some(Pending(id, actor, _)) =>
-          actor ! Replicated(key, id)
-          None
+        case Some(Pending(id, actor, _)) => actor ! Replicated(key, id); None
         case None => None
       }
   }
