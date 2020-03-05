@@ -88,23 +88,17 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
 
   def updateReplicas(replicas: Set[ActorRef]): Unit = {
     val oldReplicas = secondaries.keySet -- replicas - self
-    val oldReplicators = oldReplicas map secondaries
+    val oldReplicators = oldReplicas.map(secondaries)
     val newReplicas = replicas -- secondaries.keySet - self
     val newReplicators = createReplicators(newReplicas)
     oldReplicators foreach (_ ! PoisonPill)
     secondaries = secondaries -- oldReplicas ++ newReplicators
     replicators = secondaries.values.toSet
-    val withAliveReplicators = (withoutReplicators(oldReplicators) _).tupled
-    handlers = handlers.map(withAliveReplicators).flatten.toMap
+    handlers = handlers.map(withoutReplicators(oldReplicators) _).flatten.toMap
   }
 
-  def withoutReplicators(replicators: Set[ActorRef])(id: Long, handler: Handler): Option[(Long, Handler)] = {
-    val waiting = handler.replicators -- replicators
-    if (waiting.nonEmpty || !handler.persisted) Some(id -> handler.copy(replicators = waiting))
-    else {
-      handler.actor ! OperationAck(id)
-      None
-    }
+  def withoutReplicators(replicators: Set[ActorRef])(tuple: (Long, Handler)): Option[(Long, Handler)] = tuple match {
+    case (id, handler) => control(id, handler.copy(replicators = handler.replicators -- replicators)).map(id -> _)
   }
 
   def createLeaderHandler(key: String, valueOption: Option[String], id: Long): Handler = {
@@ -128,8 +122,8 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
   }
 
   def filterTimedOut(value: Map[Long, Handler]): Map[Long, Handler] = {
-    val time = System.currentTimeMillis
-    val (valid, timed) = handlers partition { case (_, handler) => handler.deadline > time }
+    val now = System.currentTimeMillis
+    val (valid, timed) = handlers partition { case (_, handler) => handler.deadline > now }
     timed foreach { case (id, handler) => handler.actor ! OperationFailed(id) }
     valid
   }
