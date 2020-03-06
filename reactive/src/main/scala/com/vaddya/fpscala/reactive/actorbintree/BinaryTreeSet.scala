@@ -76,8 +76,7 @@ class BinaryTreeSet extends Actor {
     * all non-removed elements into.
     */
   def garbageCollecting(newRoot: ActorRef): Receive = {
-    case op: Operation =>
-      pendingQueue :+= op
+    case op: Operation => pendingQueue :+= op
     case GC => ()
     case CopyFinished =>
       root = newRoot

@@ -30,50 +30,40 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
 
   /** Handles `Operation` messages and `CopyTo` requests. */
   def normal: Receive = {
-    case op@Insert(req, id, e) =>
-      def insert(pos: Position): Unit = subtrees get pos match {
-        case Some(node) => node ! op
-        case None =>
-          val node = context.actorOf(BinaryTreeNode.props(e, initiallyRemoved = false))
-          subtrees = subtrees.updated(pos, node)
-          req ! OperationFinished(id)
-      }
-
-      if (elem > e) insert(Left)
-      else if (elem < e) insert(Right)
-      else {
-        removed = false
-        req ! OperationFinished(id)
-      }
-
-    case op@Contains(req, id, e) =>
-      def contains(pos: Position): Unit = subtrees get pos match {
-        case Some(node) => node ! op
+    case contains@Contains(req, id, e) =>
+      if (elem == e) {
+        req ! ContainsResult(id, result = !removed)
+      } else subtrees.get(if (elem > e) Left else Right) match {
+        case Some(node) => node ! contains
         case None => req ! ContainsResult(id, result = false)
       }
-
-      if (elem > e) contains(Left)
-      else if (elem < e) contains(Right)
-      else req ! ContainsResult(id, result = !removed)
-
-    case op@Remove(req, id, e) =>
-      def remove(pos: Position): Unit = subtrees get pos match {
-        case Some(node) => node ! op
-        case None => req ! OperationFinished(id)
+    case insert@Insert(req, id, e) =>
+      if (elem == e) {
+        removed = false
+        req ! OperationFinished(id)
+      } else subtrees = subtrees.updatedWith(if (elem > e) Left else Right) {
+        case some@Some(node) =>
+          node ! insert
+          some
+        case None =>
+          req ! OperationFinished(id)
+          Some(context.actorOf(BinaryTreeNode.props(e, initiallyRemoved = false)))
       }
-
-      if (elem > e) remove(Left)
-      else if (elem < e) remove(Right)
-      else {
+    case remove@Remove(req, id, e) =>
+      if (elem == e) {
         removed = true
         req ! OperationFinished(id)
+      } else subtrees.get(if (elem > e) Left else Right) match {
+        case Some(node) => node ! remove
+        case None => req ! OperationFinished(id)
       }
-
-    case ct@CopyTo(treeNode) =>
+    case copyTo@CopyTo(treeNode) =>
       if (removed && subtrees.isEmpty) context.parent ! CopyFinished
       else {
-        if (!removed) treeNode ! Insert(self, -1, elem)
-        subtrees.values foreach (_ ! ct)
+        if (!removed) {
+          treeNode ! Insert(self, -1, elem)
+        }
+        subtrees.values foreach (_ ! copyTo)
         context become copying(subtrees.values.toSet, insertConfirmed = removed)
       }
   }
@@ -83,15 +73,17 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
     */
   def copying(expected: Set[ActorRef], insertConfirmed: Boolean): Receive = {
     case OperationFinished(_) =>
-      if (expected.nonEmpty) context become copying(expected, insertConfirmed = true)
-      else {
+      if (expected.nonEmpty) {
+        context become copying(expected, insertConfirmed = true)
+      } else {
         self ! PoisonPill
         context.parent ! CopyFinished
       }
     case CopyFinished =>
       val left = expected - sender
-      if (left.nonEmpty || !insertConfirmed) context become copying(left, insertConfirmed)
-      else {
+      if (left.nonEmpty || !insertConfirmed) {
+        context become copying(left, insertConfirmed)
+      } else {
         self ! PoisonPill
         context.parent ! CopyFinished
       }
