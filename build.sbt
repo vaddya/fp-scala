@@ -10,12 +10,14 @@ lazy val global = project
   .aggregate(
     principles,
     design,
+    parallel,
     spark,
     reactive
   )
 
 lazy val principles = sparkProject("principles")
 lazy val design = sparkProject("design")
+lazy val parallel = sparkProject("parallel")
 lazy val spark = sparkProject("spark")
 lazy val reactive = sparkProject("reactive")
 
