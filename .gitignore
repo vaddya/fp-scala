@@ -1,5 +1,3 @@
-.idea/
-target/
-project/
+.idea
+target
 .DS_Store
-
