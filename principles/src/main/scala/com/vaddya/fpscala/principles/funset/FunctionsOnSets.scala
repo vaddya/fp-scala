@@ -20,9 +20,22 @@ object FunctionsOnSets extends App {
    */
   def union(s: FunSet, t: FunSet): FunSet = x => contains(s, x) || contains(t, x)
 
+  /**
+   * Returns the intersection of the two given sets,
+   * the set of all elements that are both in `s` and `t`.
+   */
   def intersect(s: FunSet, t: FunSet): FunSet = x => contains(s, x) && contains(t, x)
 
+  /**
+   * Returns the difference of the two given sets,
+   * the set of all elements of `s` that are not in `t`.
+   */
   def diff(s: FunSet, t: FunSet): FunSet = x => contains(s, x) && !contains(t, x)
+
+  /**
+   * Returns the subset of `s` for which `p` holds.
+   */
+  def filter(s: FunSet, p: Int => Boolean): FunSet = x => contains(s, x) && p(x)
 
   /**
    * The first function tests whether a given predicate is true for all elements 

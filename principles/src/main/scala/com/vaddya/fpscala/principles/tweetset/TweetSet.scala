@@ -127,10 +127,6 @@ object Empty extends TweetSet {
 
   def descendingByRetweet: TweetList = Nil
 
-  /**
-   * The following methods are already implemented
-   */
-
   def contains(tweet: Tweet): Boolean = false
 
   def incl(tweet: Tweet): TweetSet = new NonEmpty(tweet, Empty, Empty)
@@ -169,9 +165,6 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     new Cons(tweet, remove(tweet).descendingByRetweet)
   }
 
-  /**
-   * The following methods are already implemented
-   */
   def contains(x: Tweet): Boolean =
     if (x.text < elem.text) left.contains(x)
     else if (elem.text < x.text) right.contains(x)
