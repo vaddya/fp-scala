@@ -27,7 +27,7 @@ object TimeUsage extends TimeUsageInterface {
   }
 
   def timeUsageByLifePeriod(): Unit = {
-    val (columns, initDf) = read("src/main/resources/timeusage/atussum.csv")
+    val (columns, initDf) = read("spark/src/main/resources/timeusage/atussum.csv")
     val (primaryNeedsColumns, workColumns, otherColumns) = classifiedColumns(columns)
     val summaryDf = timeUsageSummary(primaryNeedsColumns, workColumns, otherColumns, initDf)
 

@@ -25,7 +25,7 @@ object StackOverflow extends StackOverflow {
   /** Main function */
   def main(args: Array[String]): Unit = {
     sc.setLogLevel("ERROR")
-    val lines = sc.textFile("src/main/resources/stackoverflow/stackoverflow.csv")
+    val lines = sc.textFile("spark/src/main/resources/stackoverflow/stackoverflow.csv")
     val raw = rawPostings(lines)
     val grouped = groupedPostings(raw)
     val scored = scoredPostings(grouped)
