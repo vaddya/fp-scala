@@ -208,7 +208,7 @@ trait DecoderInstances {
     Decoder.fromFunction {
       case Json.Arr(items) =>
         val values = items map decoder.decode
-        if (values.exists(_.isEmpty)) None
+        if (values exists (_.isEmpty)) None
         else Some(values map (_.get))
       case _ => None
     }
@@ -258,7 +258,6 @@ trait ContactsCodecs extends DecoderInstances {
     ObjectEncoder.field[List[Person]]("people")
       .transform[Contacts](contacts => contacts.people)
 
-  /** The corresponding decoder for `Person` */
   implicit val contactsDecoder: Decoder[Contacts] =
     field[List[Person]]("people")
       .transform(people => Contacts(people))

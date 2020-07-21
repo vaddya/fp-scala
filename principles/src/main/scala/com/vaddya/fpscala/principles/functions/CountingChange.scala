@@ -14,5 +14,5 @@ object CountingChange extends App {
     }
   }
 
-  assert(countChange(3, List(1, 2)) == 3)
+  assert(countChange(4, List(1, 2)) == 3)
 }
