@@ -1,4 +1,4 @@
-package com.vaddya.fpscala.design.calculator
+package calculator
 
 import org.junit._
 import org.junit.Assert.assertEquals
@@ -146,6 +146,7 @@ class CalculatorSuite {
     val dexpr = Var[Expr](Minus(Literal(4), Literal(3)))
     val input = Map("a" -> aexpr, "b" -> bexpr, "c" -> cexpr, "d" -> dexpr)
     val output = computeValues(input)
+    println(output("a")())
     var ares = output("a")() == 7
     assert(ares, " - Value of `a` is incorrect!")
     var bres = output("b")() == 6
