@@ -34,6 +34,13 @@ package object scalashop extends BoxBlurKernelInterface {
     else v
   }
 
+  def rgba2seq(c: RGBA): Seq[Int] = red(c) :: green(c) :: blue(c) :: alpha(c) :: Nil
+
+  def seq2rgba(s: Seq[Int]): RGBA = s match {
+    case r :: g :: b :: a :: Nil => rgba(r, g, b, a)
+    case _ => throw new IllegalArgumentException
+  }
+
   /** Image is a two-dimensional matrix of pixel values. */
   class Img(val width: Int, val height: Int, private val data: Array[RGBA]) {
     def this(w: Int, h: Int) = this(w, h, new Array(w * h))
@@ -43,9 +50,18 @@ package object scalashop extends BoxBlurKernelInterface {
 
   /** Computes the blurred RGBA value of a single pixel of the input image. */
   def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA = {
-
-    // TODO implement using while loops
-    ???
+    val x1 = clamp(x - radius, 0, src.width - 1)
+    val x2 = clamp(x + radius, 0, src.width - 1)
+    val y1 = clamp(y - radius, 0, src.height - 1)
+    val y2 = clamp(y + radius, 0, src.height - 1)
+    val pixels = for (i <- x1 to x2; j <- y1 to y2)
+      yield src(i, j)
+    val sums = pixels.map(rgba2seq).foldLeft(Seq(0, 0, 0, 0)) { 
+      case (a, x) => a.zip(x).map(x => x._1 + x._2)
+    } map { x => 
+      clamp(x / pixels.size, 0, 255) 
+    }
+    seq2rgba(sums)
   }
 
   val forkJoinPool = new ForkJoinPool

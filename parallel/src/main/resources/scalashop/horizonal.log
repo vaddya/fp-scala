@@ -1,0 +1,23 @@
+Starting warmup.
+0. warmup run running time: 11062.644995 (covNoGC: NaN, covGC: NaN)
+1. warmup run running time: 10652.30929 (covNoGC: NaN, covGC: 0.0267)
+2. warmup run running time: 10634.805116 (covNoGC: NaN, covGC: 0.0225)
+3. warmup run running time: 10599.552645 (covNoGC: NaN, covGC: 0.0203)
+4. warmup run running time: 10614.345708 (covNoGC: NaN, covGC: 0.0184)
+Steady-state detected.
+Ending warmup.
+measurements: 10453.189231 ms, 10364.168771 ms, 10392.377581 ms, 10367.876587 ms, 10397.96534 ms, 10462.679752 ms, 10411.964224 ms, 10394.20401 ms, 10496.12727 ms, 10429.411968 ms
+sequential blur time: 10416.996473399999 ms
+
+Starting warmup.
+0. warmup run running time: 4860.390902 (covNoGC: NaN, covGC: NaN)
+1. warmup run running time: 4840.404049 (covNoGC: NaN, covGC: 0.0029)
+2. warmup run running time: 4827.138301 (covNoGC: NaN, covGC: 0.0035)
+3. warmup run running time: 4811.168058 (covNoGC: NaN, covGC: 0.0043)
+4. warmup run running time: 4837.99345 (covNoGC: NaN, covGC: 0.0037)
+Steady-state detected.
+Ending warmup.
+measurements: 4993.701394 ms, 4733.958767 ms, 4643.813108 ms, 4638.455608 ms, 4686.157211 ms, 4650.695955 ms, 4656.940007 ms, 4654.228214 ms, 4655.439618 ms, 4626.335906 ms
+fork/join blur time: 4693.9725788000005 ms
+
+speedup: 2.2192282333406967
