@@ -35,11 +35,11 @@ class IndexedColorFilter(initialImage: Img,
   def getStatus() = s"Converged after $steps steps."
   def getResult() = indexedImage(initialImage, newMeans)
 
-  private def imageToPoints(img: Img): Seq[Point] =
-    for (x <- 0 until img.width; y <- 0 until img.height) yield {
+  private def imageToPoints(img: Img): ParSeq[Point] =
+    (for (x <- 0 until img.width; y <- 0 until img.height) yield {
       val rgba = img(x, y)
       new Point(red(rgba), green(rgba), blue(rgba))
-    }
+    }).par
 
   private def indexedImage(img: Img, means: ParSeq[Point]) = {
     val dst = new Img(img.width, img.height)
@@ -106,7 +106,7 @@ class IndexedColorFilter(initialImage: Img,
     (0 until numColors) map (idx => initialPoints((idx * d2).toInt))
   }
 
-  private def initializeIndex(numColors: Int, points: ParSeq[Point]): Seq[Point] = {
+  private def initializeIndex(numColors: Int, points: ParSeq[Point]): ParSeq[Point] = {
     val initialPoints: Seq[Point] =
       initStrategy match {
         case RandomSampling =>
@@ -138,7 +138,7 @@ class IndexedColorFilter(initialImage: Img,
       }
 
     val d2 = initialPoints.size.toDouble / numColors
-    (0 until numColors) map (idx => initialPoints((idx * d2).toInt))
+    (0 until numColors).map(idx => initialPoints((idx * d2).toInt)).par
   }
 
   private def computeSNR(points: Seq[Point], means: Seq[Point]): Double = {
