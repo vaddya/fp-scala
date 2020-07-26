@@ -1,8 +1,5 @@
 package com.vaddya.fpscala.parallel.reductions
 
-import java.util.concurrent._
-import scala.collection._
-import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory
 import org.junit._
 import org.junit.Assert.assertEquals
 
