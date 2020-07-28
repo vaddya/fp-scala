@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 // Interfaces used by the grading infrastructure. Do not change signatures
 // or your submission will fail with a NoSuchMethodError.

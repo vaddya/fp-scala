@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 import scala.util.DynamicVariable
 

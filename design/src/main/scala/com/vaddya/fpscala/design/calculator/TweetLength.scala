@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 object TweetLength extends TweetLengthInterface {
   final val MaxTweetLength = 140

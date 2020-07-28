@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 sealed abstract class Expr
 final case class Literal(v: Double) extends Expr

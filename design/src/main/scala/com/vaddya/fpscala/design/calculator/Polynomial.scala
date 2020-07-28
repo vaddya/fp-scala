@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 object Polynomial extends PolynomialInterface {
   def computeDelta(a: Signal[Double],

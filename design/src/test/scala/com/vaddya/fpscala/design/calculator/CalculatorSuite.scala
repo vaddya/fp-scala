@@ -1,4 +1,4 @@
-package calculator
+package com.vaddya.fpscala.design.calculator
 
 import org.junit._
 import org.junit.Assert.assertEquals
@@ -56,7 +56,8 @@ class CalculatorSuite {
   }
 
    import Polynomial._
-  import Ordering.Double.TotalOrdering
+
+   import Ordering.Double.TotalOrdering
 
   def kindaEqual(a: Double, b: Double): Boolean =
     a > b - 1e-5 && a < b + 1e-5
