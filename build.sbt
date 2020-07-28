@@ -12,6 +12,7 @@ lazy val global = project
     design,
     parallel,
     spark,
+    capstone,
     reactive
   )
 
@@ -19,6 +20,7 @@ lazy val principles = sparkProject("principles")
 lazy val design = sparkProject("design")
 lazy val parallel = sparkProject("parallel")
 lazy val spark = sparkProject("spark")
+lazy val capstone = sparkProject("capstone")
 lazy val reactive = sparkProject("reactive")
 
 def sparkProject(dir: String) = Project(dir, file(dir))
