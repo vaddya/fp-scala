@@ -97,7 +97,7 @@ object Interaction extends InteractionInterface {
   /**
     * @see https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Subtiles
     */
-  private def getSubtiles(tile: Tile): Seq[Tile] = Seq(
+  def getSubtiles(tile: Tile): Seq[Tile] = Seq(
     Tile(tile.x * 2, tile.y * 2, tile.zoom + 1),
     Tile(tile.x * 2 + 1, tile.y * 2, tile.zoom + 1),
     Tile(tile.x * 2, tile.y * 2 + 1, tile.zoom + 1),
