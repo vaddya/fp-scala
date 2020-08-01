@@ -13,16 +13,6 @@ object Visualization extends VisualizationInterface {
   val ImageWidth = 360
   val ImageHeight = 180
   val Alpha = 255
-  val Colors = Seq(
-    (60d,  Color(255, 255, 255)),
-    (32d,  Color(255, 0,   0)),
-    (12d,  Color(255, 255, 0)),
-    (0d,   Color(0,   255, 255)),
-    (-15d, Color(0,   0,   255)),
-    (-27d, Color(255, 0,   255)),
-    (-50d, Color(33,  0,   107)),
-    (-60d, Color(0,   0,   0))
-  )
 
   /**
     * @param temperatures Known temperatures: pairs containing a location and the temperature at this location

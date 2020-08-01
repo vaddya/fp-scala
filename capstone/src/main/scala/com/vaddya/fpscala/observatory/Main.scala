@@ -9,7 +9,7 @@ object Main extends App {
   val temperatures = Extraction.locationYearlyAverageRecords(records)
   
   val start = System.currentTimeMillis()
-  val img = Interaction.tile(temperatures, Visualization.Colors, Tile(60, 30, 2))
+  val img = Interaction.tile(temperatures, TemperatureColors, Tile(60, 30, 2))
   println(s"Took ${System.currentTimeMillis() - start} ms")
   val file = new File("tile.png")
   println(file.getAbsolutePath)

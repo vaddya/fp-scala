@@ -30,8 +30,8 @@ trait VisualizationTest extends MilestoneSuite {
   
   @Test
   def testInterpolate(): Unit = milestoneTest {    
-    assertEquals(Color(255, 127, 127), Visualization.interpolateColor(Visualization.Colors, 46))
-    assertEquals(Color(0, 255, 255), Visualization.interpolateColor(Visualization.Colors, 0))
+    assertEquals(Color(255, 127, 127), Visualization.interpolateColor(TemperatureColors, 46))
+    assertEquals(Color(0, 255, 255), Visualization.interpolateColor(TemperatureColors, 0))
   }
   
   @Test

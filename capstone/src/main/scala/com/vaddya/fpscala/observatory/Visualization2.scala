@@ -12,14 +12,6 @@ object Visualization2 extends Visualization2Interface {
   val ImageWidth = 256
   val ImageHeight = 256
   val Alpha = 127
-  val Colors = Seq(
-    (7d,  Color(0,   0,   0)),
-    (4d,  Color(255, 0,   0)),
-    (2d,  Color(255, 255, 0)),
-    (0d,  Color(255, 255, 255)),
-    (-2d, Color(0,   255, 255)),
-    (-7d, Color(0,   0,   255)),
-  )
 
   /**
     * @param point (x, y) coordinates of a point in the grid cell
