@@ -9,8 +9,8 @@ object Interaction2 extends Interaction2Interface {
     * @return The available layers of the application
     */
   def availableLayers: Seq[Layer] = Seq(
-    Layer(LayerName.Temperatures, TemperatureColors, 1975 to 2015),
-    Layer(LayerName.Deviations, DeviationColors, 1991 to 2015)
+    Layer(LayerName.Temperatures, TemperatureColors, TemperatureYearsRange),
+    Layer(LayerName.Deviations, DeviationColors, DeviationYearsRange)
   )
 
   /**
@@ -43,7 +43,7 @@ object Interaction2 extends Interaction2Interface {
     * @return The URL pattern to retrieve tiles
     */
   def layerUrlPattern(selectedLayer: Signal[Layer], selectedYear: Signal[Year]): Signal[String] = Signal {
-    s"target/${selectedLayer().layerName.id}/${selectedYear()}"
+    s"target/${selectedLayer().layerName.id}/${selectedYear()}/{z}/{x}-{y}.png"
   }
 
   /**

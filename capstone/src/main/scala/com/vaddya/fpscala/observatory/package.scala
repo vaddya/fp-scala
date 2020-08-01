@@ -23,4 +23,9 @@ package object observatory {
     (-2d, Color(0,   255, 255)),
     (-7d, Color(0,   0,   255)),
   )
+
+  val ZoomRange: Range = 0 to 3
+  val TemperatureYearsRange: Range = 1975 to 2015
+  val DeviationNormalYearsRange: Range = 1975 to 1990
+  val DeviationYearsRange: Range = 1991 to 2015
 }

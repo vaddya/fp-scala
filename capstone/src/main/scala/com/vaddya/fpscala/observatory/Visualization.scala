@@ -6,7 +6,6 @@ import com.sksamuel.scrimage.{Image, Pixel}
   * 2nd milestone: basic visualization
   */
 object Visualization extends VisualizationInterface {
-
   val EarthRadius = 6371
   val DoubleCompareEps = 1e-5
   val DistanceEps = 1
@@ -106,7 +105,7 @@ object Visualization extends VisualizationInterface {
   private def isSame(a: Location, b: Location): Boolean = ~=(a.lat, b.lat) && ~=(a.lon, b.lon)
 
   private def isAntipodes(a: Location, b: Location): Boolean =
-    ~=(a.lat, b.lat) && (~=(180 - b.lon, a.lon) || ~=(180 - a.lon, b.lon))
+    ~=(a.lat, b.lat) && ~=(math.abs(a.lon - b.lon), 180)
 
   private def ~=(x: Double, y: Double): Boolean = math.abs(x - y) < DoubleCompareEps
 }

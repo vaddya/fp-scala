@@ -8,7 +8,6 @@ import scala.annotation.tailrec
   * 5th milestone: value-added information visualization
   */
 object Visualization2 extends Visualization2Interface {
-
   val ImageWidth = 256
   val ImageHeight = 256
   val Alpha = 127
@@ -96,5 +95,4 @@ object Visualization2 extends Visualization2Interface {
       locFun(location.lon).toInt
     ))
   }
-
 }

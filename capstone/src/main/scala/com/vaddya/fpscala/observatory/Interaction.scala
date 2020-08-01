@@ -8,9 +8,6 @@ import scala.annotation.tailrec
   * 3rd milestone: interactive visualization
   */
 object Interaction extends InteractionInterface {
-
-  import Visualization._
-
   val ImageWidth = 256
   val ImageHeight = 256
   val Alpha = 127
@@ -35,11 +32,11 @@ object Interaction extends InteractionInterface {
     colors: Iterable[(Temperature, Color)],
     tile: Tile
   ): Image = {
-    def pixel(tile: Tile): Pixel = {
+    def pixel(tile: Tile): (Int, Int, Pixel) = {
       val location = tileLocation(tile)
-      val temp = predictTemperature(temperatures, location)
-      val color = interpolateColor(colors, temp)
-      Pixel(color.red, color.green, color.blue, Alpha)
+      val temp = Visualization.predictTemperature(temperatures, location)
+      val color = Visualization.interpolateColor(colors, temp)
+      (tile.x, tile.y, Pixel(color.red, color.green, color.blue, Alpha))
     }
 
     @tailrec
@@ -48,8 +45,11 @@ object Interaction extends InteractionInterface {
       else generateSubtiles(tiles.flatMap(getSubtiles), depth - 1)
 
     val pixels = generateSubtiles(Seq(tile), 8)
-      .sortBy { case Tile(x, y, _) => (y, x) }
+      .par
       .map(pixel)
+      .seq
+      .sortBy { case (x, y, _) => (y, x) }
+      .map { case (_, _, pixel) => pixel }
       .toArray
     Image(ImageWidth, ImageHeight, pixels)
   }
@@ -66,11 +66,12 @@ object Interaction extends InteractionInterface {
     yearlyData: Iterable[(Year, Data)],
     generateImage: (Year, Tile, Data) => Unit
   ): Unit = {
-    for {
+    val inputs = for {
       (year, data) <- yearlyData
-      zoom <- 0 to 3
+      zoom <- ZoomRange
       tile <- generateTiles(zoom)
-    } generateImage(year, tile, data)
+    } yield (year, tile, data)
+    inputs.par.foreach(generateImage.tupled)
   }
 
   /**
