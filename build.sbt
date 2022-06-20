@@ -1,7 +1,7 @@
 organization := "com.vaddya"
 name := "fpscala"
 version := "1.0"
-scalaVersion := "2.13.1"
+scalaVersion := "3.1.2"
 
 lazy val global = project
   .in(file("."))
@@ -13,7 +13,8 @@ lazy val global = project
     parallel,
     spark,
     capstone,
-    reactive
+    reactive,
+    effective
   )
 
 lazy val principles = sparkProject("principles")
@@ -22,6 +23,7 @@ lazy val parallel = sparkProject("parallel")
 lazy val spark = sparkProject("spark")
 lazy val capstone = sparkProject("capstone")
 lazy val reactive = sparkProject("reactive")
+lazy val effective = sparkProject("effective")
 
 def sparkProject(dir: String) = Project(dir, file(dir))
   .settings(
@@ -50,9 +52,7 @@ lazy val compilerOptions = Seq(
   "-language:existentials",
   "-language:higherKinds",
   "-language:implicitConversions",
-  "-language:postfixOps",
-  "-encoding",
-  "utf8"
+  "-language:postfixOps"
 )
 
 lazy val assemblySettings = Seq(
