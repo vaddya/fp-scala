@@ -6,9 +6,9 @@ scalacOptions ++= Seq(
   "-Xlint",
 )
 
-parallelExecution in Test := false
+Test / parallelExecution := false
 
-val akkaVersion = "2.6.0"
+val akkaVersion = "2.6.19"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,

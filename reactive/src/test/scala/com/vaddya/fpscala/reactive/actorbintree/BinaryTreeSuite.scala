@@ -31,7 +31,7 @@ class BinaryTreeSuite extends TestKit(ActorSystem("BinaryTreeSuite")) with Impli
     }
 
   def verify(probe: TestProbe, ops: Seq[Operation], expected: Seq[OperationReply]): Unit = {
-    val topNode = system.actorOf(Props[BinaryTreeSet])
+    val topNode = system.actorOf(Props[BinaryTreeSet]())
 
     ops foreach { op =>
       topNode ! op
@@ -42,7 +42,7 @@ class BinaryTreeSuite extends TestKit(ActorSystem("BinaryTreeSuite")) with Impli
   }
 
   @Test def `proper inserts and lookups (5pts)`(): Unit = {
-    val topNode = system.actorOf(Props[BinaryTreeSet])
+    val topNode = system.actorOf(Props[BinaryTreeSet]())
 
     topNode ! Contains(testActor, id = 1, 1)
     expectMsg(ContainsResult(1, false))
@@ -114,7 +114,7 @@ class BinaryTreeSuite extends TestKit(ActorSystem("BinaryTreeSuite")) with Impli
     }
 
     val requester = TestProbe()
-    val topNode = system.actorOf(Props[BinaryTreeSet])
+    val topNode = system.actorOf(Props[BinaryTreeSet]())
     val count = 1000
 
     val ops = randomOperations(requester.ref, count)

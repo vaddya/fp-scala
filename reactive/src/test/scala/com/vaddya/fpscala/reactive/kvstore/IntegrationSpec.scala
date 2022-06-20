@@ -25,15 +25,15 @@ trait IntegrationSpec { this: KVStoreSuite =>
 
   def integrate(flaky: Boolean, lossy: Boolean, nr: Int): Unit = {
     val arbiterProbe = TestProbe()
-    val arbiter = system.actorOf(Props(classOf[given.Arbiter], lossy, arbiterProbe.ref))
-    val primary = system.actorOf(Replica.props(arbiter, given.Persistence.props(flaky)), s"integration-case$nr-primary")
+    val arbiter = system.actorOf(Props(classOf[`given`.Arbiter], lossy, arbiterProbe.ref))
+    val primary = system.actorOf(Replica.props(arbiter, `given`.Persistence.props(flaky)), s"integration-case$nr-primary")
     val client1 = session(primary)
     try arbiterProbe.expectMsg(JoinedPrimary)
     catch {
       case _: AssertionError => fail("primary replica did not join the Arbiter within 3 seconds")
     }
 
-    val secondary1 = system.actorOf(Replica.props(arbiter, given.Persistence.props(flaky)), s"integration-case$nr-secondary1")
+    val secondary1 = system.actorOf(Replica.props(arbiter, `given`.Persistence.props(flaky)), s"integration-case$nr-secondary1")
     val client2 = session(secondary1)
 
     client1.getAndVerify("k1")
@@ -57,7 +57,7 @@ trait IntegrationSpec { this: KVStoreSuite =>
     }
 
     // Join a replica later
-    val secondary2 = system.actorOf(Replica.props(arbiter, given.Persistence.props(flaky)), s"integration-case$nr-secondary2")
+    val secondary2 = system.actorOf(Replica.props(arbiter, `given`.Persistence.props(flaky)), s"integration-case$nr-secondary2")
     val client3 = session(secondary2)
 
     // Wait for replication...

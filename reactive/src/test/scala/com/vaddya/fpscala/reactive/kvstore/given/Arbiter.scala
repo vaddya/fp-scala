@@ -16,13 +16,13 @@ class Arbiter(lossy: Boolean, audit: ActorRef) extends Actor {
   def receive: Receive = {
     case Join =>
       if (leader.isEmpty) {
-        leader = Some(sender)
-        replicas += sender
-        sender ! JoinedPrimary
+        leader = Some(sender())
+        replicas += sender()
+        sender() ! JoinedPrimary
         audit ! JoinedPrimary
       } else {
-        replicas += (if (lossy) context.actorOf(Props(classOf[LossyTransport], sender)) else sender)
-        sender ! JoinedSecondary
+        replicas += (if (lossy) context.actorOf(Props(classOf[LossyTransport], sender())) else sender())
+        sender() ! JoinedSecondary
         audit ! JoinedSecondary
       }
       leader foreach (_ ! Replicas(replicas))

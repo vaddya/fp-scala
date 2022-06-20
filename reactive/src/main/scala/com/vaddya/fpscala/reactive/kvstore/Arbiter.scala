@@ -21,12 +21,12 @@ class Arbiter extends Actor {
   def receive: Receive = {
     case Join =>
       if (leader.isEmpty) {
-        leader = Some(sender)
-        replicas += sender
-        sender ! JoinedPrimary
+        leader = Some(sender())
+        replicas += sender()
+        sender() ! JoinedPrimary
       } else {
-        replicas += sender
-        sender ! JoinedSecondary
+        replicas += sender()
+        sender() ! JoinedSecondary
       }
       leader foreach (_ ! Replicas(replicas))
   }

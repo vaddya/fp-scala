@@ -1,6 +1,7 @@
 package com.vaddya.fpscala.design.codecs
 
-import org.typelevel.jawn.{ Parser, SimpleFacade }
+import org.typelevel.jawn.Facade.SimpleFacade
+import org.typelevel.jawn.Parser
 
 // Utility methods that decode values from `String` JSON blobs, and
 // render values to `String` JSON blobs
@@ -63,9 +64,9 @@ object Util {
   }
 
   implicit val facade: SimpleFacade[Json] = new SimpleFacade[Json] {
-    def jnull() = Json.Null
-    def jtrue() = Json.Bool(true)
-    def jfalse() = Json.Bool(false)
+    def jnull = Json.Null
+    def jtrue = Json.Bool(true)
+    def jfalse = Json.Bool(false)
     def jnum(s: CharSequence, decIndex: Int, expIndex: Int) = Json.Num(BigDecimal(s.toString))
     def jstring(s: CharSequence) = Json.Str(s.toString)
     def jarray(vs: List[Json]) = Json.Arr(vs)

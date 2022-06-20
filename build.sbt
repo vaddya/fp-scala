@@ -29,17 +29,17 @@ def sparkProject(dir: String) = Project(dir, file(dir))
     settings,
     assemblySettings,
     libraryDependencies ++= dependencies,
-    testOptions in Test += Tests.Argument(TestFrameworks.JUnit, "-a", "-v", "-s")
+    Test / testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v", "-s")
 )
 
 lazy val dependencies = Seq(
-  "org.typelevel" %% "jawn-parser" % "0.14.2",
-  "org.scalacheck" %% "scalacheck" % "1.14.0",
+  "org.typelevel" %% "jawn-parser" % "1.3.2",
+  "org.scalacheck" %% "scalacheck" % "1.16.0",
   "com.novocode" % "junit-interface" % "0.11" % Test
 )
 
 lazy val settings = Seq(
-  scalaVersion := "2.13.1",
+  scalaVersion := "3.1.2",
   scalacOptions ++= compilerOptions
 )
 
@@ -56,12 +56,12 @@ lazy val compilerOptions = Seq(
 )
 
 lazy val assemblySettings = Seq(
-  assemblyJarName in assembly := name.value + ".jar",
-  assemblyMergeStrategy in assembly := {
+  assembly / assemblyJarName := name.value + ".jar",
+  assembly / assemblyMergeStrategy := {
     case PathList("META-INF", _*) => MergeStrategy.discard
     case "application.conf" => MergeStrategy.concat
     case x =>
-      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      val oldStrategy = (assembly / assemblyMergeStrategy).value
       oldStrategy(x)
   }
 )

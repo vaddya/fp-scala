@@ -80,7 +80,7 @@ class BinaryTreeNode(var elem: Int, initiallyRemoved: Boolean) extends Actor {
         context.parent ! CopyFinished
       }
     case CopyFinished =>
-      val left = expected - sender
+      val left = expected - sender()
       if (left.nonEmpty || !insertConfirmed) {
         context become copying(left, insertConfirmed)
       } else {

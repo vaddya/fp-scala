@@ -20,7 +20,7 @@ class Persistence(flaky: Boolean) extends Actor {
   def receive: Receive = {
     case Persist(key, value, id) =>
       if (failSteps == 0) {
-        sender ! Persisted(key, id)
+        sender() ! Persisted(key, id)
         failSteps = newFailCount
       } else failSteps -= 1
   }

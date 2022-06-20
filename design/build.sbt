@@ -3,7 +3,7 @@ lazy val webUI = project.in(file("web-ui"))
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaVersion := "2.13.1",
-    unmanagedSources in Compile ++= {
+    Compile / unmanagedSources ++= {
       val root = baseDirectory.value / ".." / "src" / "main" / "scala" / "com" / "vaddya" / "fpscala" / "design" / "calculator"
       Seq(
         root / "Calculator.scala",

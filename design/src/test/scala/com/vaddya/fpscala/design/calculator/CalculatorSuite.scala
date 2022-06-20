@@ -13,7 +13,7 @@ class CalculatorSuite {
   def tweetLength(text: String): Int =
     text.codePointCount(0, text.length)
 
-  @Test def `tweetRemainingCharsCount with a constant signal`: Unit = {
+  @Test def `tweetRemainingCharsCount with a constant signal`(): Unit = {
     val result = tweetRemainingCharsCount(Var("hello world"))
     assert(result() == MaxTweetLength - tweetLength("hello world"))
 
@@ -22,12 +22,12 @@ class CalculatorSuite {
     assert(result2() == MaxTweetLength - tweetLength(tooLong))
   }
 
-  @Test def `tweetRemainingCharsCount with a supplementary char`: Unit = {
+  @Test def `tweetRemainingCharsCount with a supplementary char`(): Unit = {
     val result = tweetRemainingCharsCount(Var("foo blabla \uD83D\uDCA9 bar"))
     assert(result() == MaxTweetLength - tweetLength("foo blabla \uD83D\uDCA9 bar"))
   }
 
-  @Test def `tweetRemainingCharsCount's result signal should follow the input signal`: Unit = {
+  @Test def `tweetRemainingCharsCount's result signal should follow the input signal`(): Unit = {
     val input = Var("hello world")
     val result = tweetRemainingCharsCount(input)
     assert(result() == MaxTweetLength - tweetLength("hello world"))
@@ -38,7 +38,7 @@ class CalculatorSuite {
     assert(result() == MaxTweetLength - tweetLength("こんにちは"))
   }
 
-  @Test def `colorForRemainingCharsCount with a constant signal"`: Unit = {
+  @Test def `colorForRemainingCharsCount with a constant signal"`(): Unit = {
     val resultGreen1 = colorForRemainingCharsCount(Var(52))
     assertEquals("green", resultGreen1())
     val resultGreen2 = colorForRemainingCharsCount(Var(15))
@@ -62,7 +62,7 @@ class CalculatorSuite {
   def kindaEqual(a: Double, b: Double): Boolean =
     a > b - 1e-5 && a < b + 1e-5
 
-  @Test def `computeDelta test`: Unit = {
+  @Test def `computeDelta test`(): Unit = {
     val (a, b, c) = (Var(1.0), Var(4.0), Var(1.0))
     val result = computeDelta(a, b, c)
 
@@ -73,7 +73,7 @@ class CalculatorSuite {
     assert(kindaEqual(result(), -2601.2672))
   }
 
-  @Test def `computeSolutions test`: Unit = {
+  @Test def `computeSolutions test`(): Unit = {
     val (a, b, c) = (Var(1.0), Var(4.0), Var(1.0))
     val delta = Var(12.0)
     val result = computeSolutions(a, b, c, delta)
@@ -100,7 +100,7 @@ class CalculatorSuite {
    import Calculator._
 
   // test cases for calculator
-  @Test def `Self dependency`: Unit = {
+  @Test def `Self dependency`(): Unit = {
     val input = Map("a" -> Signal[Expr](Plus(Ref("a"), Literal(1))),
       "d" -> Signal[Expr](Minus(Literal(5), Literal(3))))
     val output = computeValues(input)
@@ -113,7 +113,7 @@ class CalculatorSuite {
       "that do not refer to themselves")
   }
 
-  @Test def `Cyclic dependencies should result in NaN`: Unit = {
+  @Test def `Cyclic dependencies should result in NaN`(): Unit = {
     val input = Map("a" -> Signal[Expr](Plus(Ref("b"), Literal(1))),
       "b" -> Signal[Expr](Divide(Ref("c"), Ref("d"))),
       "c" -> Signal[Expr](Times(Literal(5), Ref("a"))),
@@ -127,7 +127,7 @@ class CalculatorSuite {
       "that do not have any cyclic dependency")
   }
 
-  @Test def `Referencing an unknown variable should result in NaN`: Unit = {
+  @Test def `Referencing an unknown variable should result in NaN`(): Unit = {
     val input = Map("a" -> Signal[Expr](Plus(Ref("b"), Literal(1))),
       "d" -> Signal[Expr](Minus(Literal(5), Literal(3))))
     val output = computeValues(input)
@@ -140,7 +140,7 @@ class CalculatorSuite {
       "that do not reference unknown variables")
   }
 
-  @Test def `Expressions corresponding to every variable should be correctly evaluated`: Unit = {
+  @Test def `Expressions corresponding to every variable should be correctly evaluated`(): Unit = {
     val aexpr = Var[Expr](Plus(Ref("b"), Literal(1)))
     val bexpr = Var[Expr](Times(Ref("c"), Ref("d")))
     val cexpr = Var[Expr](Plus(Literal(5), Ref("d")))
@@ -169,7 +169,7 @@ class CalculatorSuite {
     assert(dres, " - Value of `d` is incorrect after updating expression `d`!")
   }
 
-  @Test def `When an expression changes, other variables that depend on it should be recomputed`: Unit = {
+  @Test def `When an expression changes, other variables that depend on it should be recomputed`(): Unit = {
     val aexpr = Var[Expr](Plus(Ref("b"), Literal(1)))
     val bexpr = Var[Expr](Times(Ref("c"), Ref("d")))
     val cexpr = Var[Expr](Plus(Literal(5), Ref("d")))
@@ -187,7 +187,7 @@ class CalculatorSuite {
       "when an expression changes")
   }
 
-  @Test def `If b previously depended on a, but no longer does, then it should not be recomputed anymore when a changes`: Unit = {
+  @Test def `If b previously depended on a, but no longer does, then it should not be recomputed anymore when a changes`(): Unit = {
     val aexpr = Var[Expr](Minus(Literal(4), Literal(3)))
     val bexpr = Var[Expr](Plus(Ref("a"), Literal(1)))
     val input = Map("a" -> aexpr, "b" -> bexpr)
@@ -209,7 +209,7 @@ class CalculatorSuite {
     assert(bchanged == 0, " - Signal `b` should not be recomputed")
   }
 
-  @Test def `When an expression changes, *only* the variables that depend on it should be recomputed`: Unit = {
+  @Test def `When an expression changes, *only* the variables that depend on it should be recomputed`(): Unit = {
     val aexpr = Var[Expr](Plus(Ref("b"), Literal(1)))
     val bexpr = Var[Expr](Times(Literal(5), Ref("d")))
     val cexpr = Var[Expr](Plus(Literal(5), Ref("d")))

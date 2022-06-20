@@ -18,7 +18,7 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
   )
   implicit lazy val arbHeap: Arbitrary[H] = Arbitrary(genHeap)
 
-  property("insertion of heap min to heap should not change its min") = forAll { h: H =>
+  property("insertion of heap min to heap should not change its min") = forAll { (h: H) =>
     val m = if (isEmpty(h)) 0 else findMin(h)
     findMin(insert(m, h)) == m
   }
@@ -28,13 +28,13 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     findMin(h) == (a min b)
   }
 
-  property("after insertion and deletion from empty heap it should be empty") = forAll { h: H =>
+  property("after insertion and deletion from empty heap it should be empty") = forAll { (h: H) =>
     isEmpty(h) ==> {
       isEmpty(deleteMin(insert(10, h)))
     }
   }
 
-  property("sequence of min should be sorted in ascending order") = forAll { h: H =>
+  property("sequence of min should be sorted in ascending order") = forAll { (h: H) =>
     @tailrec
     def ascending(prev: A, heap: H): Boolean = {
       if (isEmpty(heap)) true

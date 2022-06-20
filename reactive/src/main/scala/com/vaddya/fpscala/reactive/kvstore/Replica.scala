@@ -56,7 +56,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
 
   def leader: Receive = {
     case Replicas(replicas) => updateReplicas(replicas)
-    case Get(key, id) => sender ! GetResult(key, kv get key, id)
+    case Get(key, id) => sender() ! GetResult(key, kv get key, id)
     case Insert(key, value, id) =>
       kv += key -> value
       handlers += id -> createLeaderHandler(key, Some(value), id)
@@ -67,7 +67,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
       context.setReceiveTimeout(100.millis)
     case Replicated(_, id) =>
       handlers = handlers.updatedWith(id) {
-        case Some(handler) => control(id, handler.copy(replicators = handler.replicators - sender))
+        case Some(handler) => control(id, handler.copy(replicators = handler.replicators - sender()))
         case None => None // timed out
       }
     case Persisted(_, id) =>
@@ -94,7 +94,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
     oldReplicators foreach (_ ! PoisonPill)
     secondaries = secondaries -- oldReplicas ++ newReplicators
     replicators = secondaries.values.toSet
-    handlers = handlers.map(withoutReplicators(oldReplicators) _).flatten.toMap
+    handlers = handlers.map(withoutReplicators(oldReplicators)).flatten.toMap
   }
 
   def withoutReplicators(replicators: Set[ActorRef])(tuple: (Long, Handler)): Option[(Long, Handler)] = tuple match {
@@ -107,7 +107,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
     val deadline = operationDeadline()
     storage ! persist
     replicators foreach (_ ! replicate)
-    Handler(sender, persist, persisted = false, replicators, deadline)
+    Handler(sender(), persist, persisted = false, replicators, deadline)
   }
 
   def control(id: Long, handler: Handler): Option[Handler] = handler match {
@@ -130,9 +130,9 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
 
   def replica: Receive = {
     case Get(key, id) =>
-      sender ! GetResult(key, kv get key, id)
+      sender() ! GetResult(key, kv get key, id)
     case Snapshot(key, valueOption, seq) =>
-      if (seqCounter > seq && !handlers.contains(seq)) sender ! SnapshotAck(key, seq)
+      if (seqCounter > seq && !handlers.contains(seq)) sender() ! SnapshotAck(key, seq)
       else if (seqCounter == seq) {
         valueOption match {
           case Some(value) => kv += (key -> value)
@@ -158,7 +158,7 @@ class Replica(val arbiter: ActorRef, persistenceProps: Props) extends Actor {
   def createReplicaHandler(key: String, valueOption: Option[String], id: Long): Handler = {
     val persist = Persist(key, valueOption, id)
     storage ! persist
-    Handler(sender, persist)
+    Handler(sender(), persist)
   }
 
   def persist(handlers: Iterable[Handler]): Unit = handlers filterNot (_.persisted) foreach (storage ! _.persist)
