@@ -1,4 +1,4 @@
-package fireworks
+package com.vaddya.fpscala.effective.fireworks
 
 import doodle.core.{Angle, Point}
 import org.scalacheck.{Arbitrary, Gen, Prop, Test}

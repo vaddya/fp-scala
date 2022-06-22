@@ -17,5 +17,5 @@ lazy val webUI = project.in(file("web-ui"))
       "org.scala-js" %% "scalajs-dom_sjs0.6" % "0.9.7",
       "com.lihaoyi" %% "scalatags" % "0.7.0"
     ),
-    scalaJSUseMainModuleInitializer := true,
+    scalaJSUseMainModuleInitializer := true
   )

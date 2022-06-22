@@ -1,4 +1,4 @@
-package fireworks
+package com.vaddya.fpscala.effective.fireworks
 
 import cats.instances.list.*
 import cats.instances.unit.*

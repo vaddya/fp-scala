@@ -1,8 +1,9 @@
-package fireworks
+package com.vaddya.fpscala.effective.fireworks
 
 import munit.*
 import org.scalacheck.Prop
 import org.scalacheck.Prop.propBoolean
+
 import scala.util.Random
 
 class FireworksSuite extends FunSuite, FireworksGenerators:
@@ -166,9 +167,11 @@ class FireworksSuite extends FunSuite, FireworksGenerators:
   // We don't use ScalaCheckSuite in this assignment to provide simpler error messages to the students
   def checkProperty(prop: Prop): Unit =
     val result = org.scalacheck.Test.check(org.scalacheck.Test.Parameters.default, prop)
+
     def failure(labels: Set[String], fallback: String): Nothing =
       if labels.isEmpty then throw AssertionError(fallback)
       else throw AssertionError(labels.mkString(". "))
+
     result.status match
       case org.scalacheck.Test.Passed | _: org.scalacheck.Test.Proved => ()
       case org.scalacheck.Test.Failed(_, labels) => failure(labels, "A property failed.")
