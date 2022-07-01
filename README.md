@@ -7,3 +7,4 @@
 * `capstone` - [Functional Programming in Scala Capstone](https://www.coursera.org/learn/scala-capstone), [Certificate](https://www.coursera.org/account/accomplishments/certificate/FLQGR3W83U9W)
 * `reactive` - [Programming Reactive Systems](https://www.edx.org/course/programming-reactive-systems)
 * `effective` - [Effective Programming in Scala](https://www.coursera.org/learn/effective-scala)
+* `cats` - [Scala with Cats Book](https://underscore.io/books/scala-with-cats/)

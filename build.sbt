@@ -14,7 +14,8 @@ lazy val global = project
     spark,
     capstone,
     reactive,
-    effective
+    effective,
+    cats
   )
 
 lazy val principles = sparkProject("principles")
@@ -24,6 +25,7 @@ lazy val spark = sparkProject("spark")
 lazy val capstone = sparkProject("capstone")
 lazy val reactive = sparkProject("reactive")
 lazy val effective = sparkProject("effective")
+lazy val cats = sparkProject("cats")
 
 def sparkProject(dir: String) = Project(dir, file(dir))
   .settings(
