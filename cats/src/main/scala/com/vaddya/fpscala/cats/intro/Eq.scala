@@ -3,10 +3,9 @@ package com.vaddya.fpscala.cats.intro
 import cats.Eq
 import cats.syntax.eq.*
 
-object Eq {
+object Eq:
   implicit val catEq: Eq[Cat] = (cat1, cat2) =>
     cat1 == cat2
-}
 
 @main def runEq(): Unit =
   import Eq.*

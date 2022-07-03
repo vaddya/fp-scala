@@ -4,15 +4,13 @@ import cats.Monoid
 import cats.instances.string.*
 import cats.syntax.monoid.*
 
-trait MySemigroup[A] {
+trait MySemigroup[A]:
   def combine(x: A, y: A): A
-}
 
-trait MyMonoid[A] extends MySemigroup[A] {
+trait MyMonoid[A] extends MySemigroup[A]:
   def empty: A
-}
 
-object MyMonoid {
+object MyMonoid:
   def apply[A](using monoid: MyMonoid[A]): MyMonoid[A] = monoid
 
   given booleanAndMonoid: MyMonoid[Boolean] with
@@ -42,7 +40,6 @@ object MyMonoid {
 
   given setIntersectMonoid[A]: MySemigroup[Set[A]] with
     override def combine(x: Set[A], y: Set[A]): Set[A] = x & y
-}
 
 @main def runMonoid(): Unit =
   import MyMonoid.given
